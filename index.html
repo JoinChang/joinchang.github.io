@@ -16,9 +16,11 @@
 	<link href="src/img/favicon.ico" mce_href="favicon.ico" type="image/x-icon" rel="icon">
 	<script src="src/js/jquery-3.2.1.min.js"></script>
 	<script src="src/js/jquery.nicescroll.js"></script>
-	<script src="src/js/muzik.min.js"></script>
 
 	<style>
+		:root {
+			--main: rgb(231,27,100);
+		}
 		body {
 			margin: 0;
 		}
@@ -87,18 +89,19 @@
 			height: 90px;
 		}
 		footer>p {
-			text-shadow: 0 0 1px #000;
 			position: absolute;
 			display: block;
+			text-shadow: 0 0 1px #000;
 			width: 60%;
 			top: 20px;
 			right: 60px;
 			font-size: 18px;
+			z-index: 1;
 		}
 		footer>p>a {
 			text-shadow: none;
 			text-decoration: none;
-			color: rgb(231,27,100);
+			color: var(--main, rgb(231,27,100));
 		}
 		footer>p>a:hover {
 			text-decoration: underline;
@@ -113,6 +116,33 @@
 			cursor: pointer;
 			fill: white;
 		}
+		#footer-down-menu {
+			position: absolute;
+			color: black;
+			width: 128px;
+			right: 0;
+			bottom: 48px;
+			background: white;
+			box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+		}
+		#footer-down-menu>div {
+		    position: relative;
+			cursor: pointer;
+			padding: 8px;
+			height: 24px;
+			transition: all .3s;
+		}
+		#footer-down-menu>div:hover {
+			background: #EEE;
+		}
+		#footer-down-menu>div>svg {
+		    position: relative;
+			float: left;
+		}
+		#footer-down-menu>div>p {
+			display: inline;
+			position: relative;
+		}
 		#body-2 {
 			position: absolute;
 			top: 100%;
@@ -123,19 +153,32 @@
 		}
 		#body-2 h1 {
 			font-weight: normal;
-			border-left: 4px solid rgb(231,27,100);
+			border-left: 4px solid var(--main, rgb(231,27,100));
 			padding-left: 15px;
 		}
 		#body-2 a {
-			color: rgb(231,27,100);
+			color: var(--main, rgb(231,27,100));
 		}
 		#body-2 span {
-			color: rgb(231,27,100);
+			color: var(--main, rgb(231,27,100));
 		}
 		#body-2 h3 {
 			font-weight: normal;
 			font-size: 22px;
-			    margin: 0;
+			margin: 0;
+		}
+		#body-2-project>div {
+			display: flow-root;
+			margin-bottom: 16px;
+		}
+		#body-2-project>div>div	{
+			display: flow-root;
+		}
+		#body-2-project>div>img {
+			position: relative;
+			float: left;
+			width: 128px;
+			margin-right: 20px;
 		}
 		header {
 			position: absolute;
@@ -143,7 +186,7 @@
 			z-index: 2;
 			width: 100%;
 			background: white;
-			border-bottom: 2px solid rgb(231,27,100);
+			border-bottom: 2px solid var(--main, rgb(231,27,100));
 		}
 		header>a {
 			text-decoration: none;
@@ -175,6 +218,16 @@
 		}
 		.developers>p {
 			margin: 10px 0 24px 0;
+		}
+		#canvas {
+			position: absolute;
+			width: 100%;
+			height: 200px;
+			bottom: 0;
+			left: 0;
+			opacity: .2;
+			image-rendering: pixelated;
+			z-index: 0;
 		}
 		.fade-in {
 			opacity: 0;
@@ -225,9 +278,9 @@
 			<h3>Network</h3>
 		</div>
 		<footer>
-			<p>Copyright &copy; 2017 - 2019 <a href="https://lxns.org/">Lxnet</a>.</p>
+			<p>Copyright &copy; 2017 - 2020 <a href="https://lxns.org/">Lxnet</a>.</p>
 			<div id="footer-down">
-				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 284.929 284.929" xml:space="preserve" onclick="toNext()">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 284.929 284.929" xml:space="preserve" onclick="toNext()" oncontextmenu="showMenu()" id="footer-down-button">
 					<g>
 						<g>
 							<path d="M135.899,167.877c1.902,1.902,4.093,2.851,6.567,2.851s4.661-0.948,6.562-2.851L282.082,34.829    c1.902-1.903,2.847-4.093,2.847-6.567s-0.951-4.665-2.847-6.567L267.808,7.417c-1.902-1.903-4.093-2.853-6.57-2.853    c-2.471,0-4.661,0.95-6.563,2.853L142.466,119.622L30.262,7.417c-1.903-1.903-4.093-2.853-6.567-2.853    c-2.475,0-4.665,0.95-6.567,2.853L2.856,21.695C0.95,23.597,0,25.784,0,28.262c0,2.478,0.953,4.665,2.856,6.567L135.899,167.877z"/>
@@ -235,7 +288,32 @@
 						</g>
 					</g>
 				</svg>
+				<div id="footer-down-menu" style="display: none">
+					<div id="start-audio" onclick="audioVisualizer()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path d="M8 5v14l11-7z"/>
+							<path d="M0 0h24v24H0z" fill="none"/>
+						</svg>
+						<p>播放音乐</p>
+					</div>
+					<div id="pause-audio" onclick="pauseAudio()" style="display: none">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+							<path d="M0 0h24v24H0z" fill="none"/>
+						</svg>
+						<p>暂停音乐</p>
+					</div>
+					<div id="change-audio" onclick="changeAudio()" style="display: none">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path d="M0 0h24v24H0z" fill="none"/>
+							<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>
+						</svg>
+						<p>换一首</p>
+					</div>
+				</div>
 			</div>
+			<canvas id="canvas"></canvas>
+			<audio id="audio"></audio>
 		</footer>
 		<header ondragstart="return false;">
 			<a href="https://lxns.org/">首页</a>
@@ -244,7 +322,6 @@
 		</header>
 		<div id="body-2">
 			<div class="fade-in">
-	<canvas id="canvas" width="600" height="300"></canvas>
 				<h1>简介</h1>
 				<p>该页面是自创站以来，第六代主页，故命名为 <span>Lxns Network Homepage 6.0</span>。</p>
 				<p>本网站采用 <a href="//creativecommons.org/licenses/by/4.0/deed.zh">Creative Commons 4.0</a> 进行许可，采用了 BY-NC 协议。</p>
@@ -254,32 +331,53 @@
 			<div class="fade-in">
 				<h1>开发者</h1>
 				<div class="developers">
-				<img src="https://blog.lxns.org/avatar/?id=1&size=64">
-				<h3>Lxns</h3>
-				<p>Lxns Network 站长。</p>
+					<img src="https://blog.lxns.org/avatar/?id=1&size=64">
+					<h3>Lxns</h3>
+					<p>Lxns Network 站长。</p>
 				</div>
 				<div class="developers">
-				<img src="https://blog.lxns.org/avatar/?id=2&size=64">
-				<h3>MC_Myth</h3>
-				<p>辅助制作者。</p>
+					<img src="https://blog.lxns.org/avatar/?id=2&size=64">
+					<h3>MC_Myth</h3>
+					<p>辅助制作者。</p>
 				</div>
 			</div>
-			<div class="fade-in">
-				<h1>其它项目</h1>
-				<h3>Lxns Network Alpha 项目</h3>
-				<p>人人都可以用来交流的平台。</p>
-				<p><a href="https://blog.lxns.org/">https://blog.lxns.org/</a></p>
-				<h3>软糖酱 QQ 机器人</h3>
-				<p>一款基于酷 Q 的完全公益性质的功能性 QQ 机器人，拥有代码编译、图站查询、图片处理等功能。</p>
-				<p><a href="https://bot.lxns.org/">https://bot.lxns.org/</a></p>
-				<h3>Crypko Beta 版信息查询</h3>
-				<p>用于使用 Crypko ID 查询 Crypko 的详细信息，但不支持图片。</p>
-				<p><a href="https://lxns.org/crypko/">https://lxns.org/crypko/</a></p>
-				<h3>Live Chat 在线聊天室</h3>
-				<p>使用 Websocket 进行多端对话，且支持图片传输。</p>
-				<p><a href="https://lxns.org/chat.html">https://lxns.org/chat.html</a></p>
-				<h3>云援交 RbqYun</h3>
-				<p><a href="https://www.rbqyun.net/">https://www.rbqyun.net/</a></p>
+			<div id="body-2-project" class="fade-in">
+				<h1>项目列表</h1>
+				<div>
+					<img src="./src/img/favicon.ico">
+					<div>
+						<h3>Lxns Network Alpha 项目</h3>
+						<p>人人都可以用来交流的平台。</p>
+						<p><a href="https://blog.lxns.org/">https://blog.lxns.org/</a></p>
+					</div>
+				</div>
+				<div>
+					<img src="https://bot.lxns.org/favicon.png">
+					<div>
+						<h3>软糖酱 QQ 机器人</h3>
+						<p>一款基于酷 Q 的完全公益性质的功能性 QQ 机器人，拥有代码编译、图站查询、图片处理等功能。</p>
+						<p><a href="https://bot.lxns.org/">https://bot.lxns.org/</a></p>
+					</div>
+				</div>
+				<div>
+					<h3>Pixiv Viewer</h3>
+					<p>基于 Vue.js，使用 Imjad Pixiv API 来浏览 Pixiv 的内容，且支持中、英、日三语界面。</p>
+					<p><a href="https://pixiv.lxns.org/">https://pixiv.lxns.org/</a></p>
+				</div>
+				<div>
+					<h3>Crypko Beta 版信息查询</h3>
+					<p>用于使用 Crypko ID 查询 Crypko 的详细信息，但不支持图片。</p>
+					<p><a href="https://lxns.org/crypko/">https://lxns.org/crypko/</a></p>
+				</div>
+				<div>
+					<h3>Live Chat 在线聊天室</h3>
+					<p>使用 Websocket 进行多端对话，且支持图片传输。</p>
+					<p><a href="https://lxns.org/chat.html">https://lxns.org/chat.html</a></p>
+				</div>
+				<div>
+					<h3>云援交 RbqYun</h3>
+					<p><a href="https://www.rbqyun.net/">https://www.rbqyun.net/</a></p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -312,6 +410,12 @@ $(function(){
 		c = window.innerHeight;
 		checkScroll();
 	}
+	window.onclick = function(e) {
+		var e = e || window.event;
+		if (e.button == "0") {
+			$("#footer-down-menu").slideUp(100);
+		}
+	}
 })
 function checkScroll() {
 	var a = window.innerHeight + $(document).scrollTop() - 140;
@@ -339,6 +443,7 @@ function checkScroll() {
 		$("header").css("top", "100%");
 	}
 	if ($(document).scrollTop() > window.innerHeight - 90) {
+		$("#footer-down-menu").css("display", "none");
 		$("#footer-down").css("position", "fixed");
 		$("#footer-down").css("transform", "rotate(" + (180 - (d / 90 * 180)) + "deg)");
 		if ($(document).scrollTop() > window.innerHeight - 25) {
@@ -371,6 +476,31 @@ function checkFadeIn() {
 		if ($(el).visible(true)) $(el).addClass("come-in");
 	})
 }
+var touchY = 0;
+var longClick =0;
+$("#footer-down-button").on({
+    touchstart: function(e){
+        longClick=0;
+        timeOutEvent = setTimeout(function(){
+			if ($("#footer-down-menu").css("display") == "none") $("#footer-down-menu").slideDown(100);
+			else $("#footer-down-menu").slideUp(100);
+            longClick=1;
+        },500);
+        var touch = e.touches[0];
+        touchY = touch.clientY;
+    },
+    touchmove: function(){
+        clearTimeout(timeOutEvent);
+        timeOutEvent = 0;
+        var touch = e.touches[0]
+        if(Math.abs(touch.clientY - touchY) < 10){
+            e.preventDefault();
+        }
+    },
+    touchend: function(e){
+        clearTimeout(timeOutEvent);
+    }
+});
 function toNext() {
 	$('body,html').animate({
 		scrollTop: c
@@ -383,17 +513,116 @@ function toTop() {
 	}, 1000);
 	return false;
 }
+function showMenu() {
+	var e = window.event;
+	e.preventDefault();
+	if (e.button != "0") {
+		if ($("#footer-down-menu").css("display") == "none") $("#footer-down-menu").slideDown(100);
+		else $("#footer-down-menu").slideUp(100);
+	}
+}
+function audioVisualizer() {
+	$("#start-audio").css("display", "none");
+	$("#start-audio").attr("onclick", "startAudio()");
+	$("#pause-audio").css("display", "block");
+	$("#change-audio").css("display", "block");
+	var title = document.getElementById("body-1");
+	var audio = document.getElementById("audio");
+    audio.src = "https://lxns.org/audio/music-" + parseInt(Math.random() * 74 + 1) + ".mp3";
+    audio.load();
+    audio.play();
+    var context = new (window.AudioContext || window.webkitAudioContext)() || false; 
+	if (!context) alert("浏览器不支持音频可视化");
+    try {
+		audio.addEventListener('ended', function () {
+			$("#start-audio").css("display", "block");
+			$("#pause-audio").css("display", "none");
+		}, false);
+		var src = context.createMediaElementSource(audio);
+		var analyser = context.createAnalyser();
+
+		var canvas = document.getElementById("canvas");
+		canvas.width = window.innerWidth;
+		canvas.height = 200;
+		var ctx = canvas.getContext("2d");
+
+		src.connect(analyser);
+		analyser.connect(context.destination);
+
+		analyser.fftSize = 2048;
+
+		var bufferLength = analyser.frequencyBinCount;
+
+		var freqDataArray = new Uint8Array(bufferLength);
+
+		var WIDTH = canvas.width;
+		var HEIGHT = canvas.height;
+
+		var barWidth = 20;
+		var barHeight;
+		var x = 0;
+		
+		window.addEventListener("resize", function() {
+			canvas.width = window.innerWidth;
+			WIDTH = canvas.width;
+		})
+		if (analyser.getFloatTimeDomainData) {
+			var dataArray = new Float32Array(analyser.fftSize);
+		} else {
+			var dataArray = new Uint8Array(analyser.fftSize);
+		}
+
+		function renderFrame() {
+			requestAnimationFrame(renderFrame);
+			if (analyser.getFloatTimeDomainData) {
+				analyser.getFloatTimeDomainData(dataArray);
+			} else {
+				analyser.getByteTimeDomainData(dataArray);
+			}
+			var sampleAverage = 0;
+			if (analyser.getFloatTimeDomainData) {
+				for (var i = 0; i < dataArray.length; i++) {
+					sampleAverage += Math.abs(dataArray[i]);
+				}
+			} else {
+				for (var i = 0; i < dataArray.length; i++) {
+					sampleAverage += Math.abs(dataArray[i] - 128) / 128;
+				}
+			}
+			sampleAverage /= dataArray.length;
+			var shadow = 2 * (Math.exp(sampleAverage) - 1);
+			var shadowInner = 2 * (Math.exp(sampleAverage / 2) - 1);
+			if (shadowInner == 0) title.style['text-shadow'] = "0px 1px 3px white, 0px 1px 3px white";
+			else title.style['text-shadow'] = "0px 1px " + shadow + "em white, 0px 1px " + shadowInner + "em white";
+			x = 0;
+			analyser.getByteFrequencyData(freqDataArray);
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			for (var i = 0; i < bufferLength; i++) {
+				barHeight = freqDataArray[i];
+				ctx.fillStyle = "white";
+				ctx.fillRect(x, 300 - barHeight*1, barWidth, barHeight*1);
+
+				x += barWidth + 5;
+			}
+		}
+		renderFrame();
+	} catch(e) {
+		//
+	}
+};
+function startAudio() {
+	$("#start-audio").css("display", "none");
+	$("#pause-audio").css("display", "block");
+	$("#change-audio").css("display", "block");
+	document.getElementById("audio").play();
+}
+function pauseAudio() {
+	$("#start-audio").css("display", "block");
+	$("#pause-audio").css("display", "none");
+	document.getElementById("audio").pause();
+}
+function changeAudio() {
+	document.getElementById("audio").pause();
+	audioVisualizer();
+}
 </script>
-	<script>
- var M = new Muzik({
-    load: './audio/music-73.mp3',
-    canvas: '#canvas',
-    draw_conf: {
-       type: 'foldline',
-       color: '#fff',
-       lineWidth: 2,
-       k: 0.05,
-       n: 25,
-    },
-  });
-	</script>
